@@ -25,8 +25,7 @@ It has 3 projects:
 * cd WebJysk
 
 * Run app:
-* by:
-* dotnet run
+ dotnet run
 
 ## Notes
 
