@@ -32,8 +32,8 @@ It has 3 projects:
 - Some endpoints use `[Authorize]`, so get JWT token first from auth endpoints.
 - Roles are seeded on app startup.
 ## Not Done Yet 
-** Domian : -Filter
-** Infrastructure : Service - adding filter,search and all methouds
-** WeJysk : Controller - Role adding and return methods
+* Domian : -Filter
+* Infrastructure : Service - adding filter,search and all methouds
+* WeJysk : Controller - Role adding and return methods
 
 
