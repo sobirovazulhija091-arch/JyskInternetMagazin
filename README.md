@@ -31,5 +31,4 @@ It has 3 projects:
 
 - Some endpoints use `[Authorize]`, so get JWT token first from auth endpoints.
 - Roles are seeded on app startup.
-- This project is for learning and can be improved.
 
