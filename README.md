@@ -33,7 +33,7 @@ It has 3 projects:
 - Roles are seeded on app startup.
 ## Not Done Yet 
 ** Domian : -Filter
-** INfrastructure : Service - adding filter and search
-** WeJysk : Controller - Role adding
+** Infrastructure : Service - adding filter,search and all methouds
+** WeJysk : Controller - Role adding and return methods
 
 
