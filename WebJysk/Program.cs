@@ -1,13 +1,12 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-
+using Quartz;
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.Configure<EmailSetting>(
@@ -56,13 +55,32 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("SendEmailPolicy",
         policy => policy.RequireClaim("Permission", "SendEmail"));
 });
+
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IUserService,UserService>();
-builder.Services.AddScoped<IOrderService,OrderService>();
-builder.Services.AddScoped<IProductService,ProductService>();
-builder.Services.AddScoped<ICategoryService, CategoryServce>();
-builder.Services.AddScoped<ICartService,CartService>();
+builder.Services.AddHostedService<EmailWorker>();
+builder.Services.AddLogging(config => { config.AddConsole(); });
+
+builder.Services.AddQuartz(q =>
+{
+    var jobKey = new JobKey("ReportJob");
+
+    q.AddJob<ReportJob>(opts => opts.WithIdentity(jobKey));
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithSimpleSchedule(x =>
+            x.WithIntervalInMinutes(2)
+             .RepeatForever()));
+});
+
+builder.Services.AddQuartzHostedService();
+
+// builder.Services.AddScoped<IUserService,UserService>();
+// builder.Services.AddScoped<IOrderService,OrderService>();
+// builder.Services.AddScoped<IProductService,ProductService>();
+// builder.Services.AddScoped<ICategoryService, CategoryServce>();
+// builder.Services.AddScoped<ICartService,CartService>(); more 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -80,7 +98,7 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Введите JWT токен так: Bearer {token}"
+        Description = "Р’РІРµРґРёС‚Рµ JWT С‚РѕРєРµРЅ С‚Р°Рє: Bearer {token}"
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -98,6 +116,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+
 
 var app = builder.Build();
 

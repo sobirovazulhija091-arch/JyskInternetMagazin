@@ -1,7 +1,7 @@
 public interface IUserService
 {
-    Task<Response<User>> GetByIdAsync(string userId);
-    Task<Response<List<User>>> GetAsync();
-     Task<Response<string>> UpdateAsync(string userid,UpdateUserDto dto);
-     Task<Response<string>> DeleteAsync(string userid);   
+    Task<Response<List<User>>> GetAllAsync();
+    Task<Response<User>> GetByIdAsync(string id);
+    Task<Response<string>> UpdateAsync(string id, UpdateUserDto dto);
+    Task<Response<string>> DeleteAsync(string id);
 }

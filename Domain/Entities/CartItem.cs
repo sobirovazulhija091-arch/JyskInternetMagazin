@@ -3,8 +3,11 @@ using System.Net.NetworkInformation;
 public class CartItem
 {
     public int Id { get; set; }
+    public int CartId{get;set;}
     public int ProductId { get; set; }
-    public string UserId { get; set; }
-   public Product Product { get; set; } = null!;
-    public User User { get; set; } = null!;
+    public int Quantity{get;set;}
+    public decimal Price{get;set;}
+   public Product? Products { get; set; }
+   public Cart? Carts{get;set;}
 }
+

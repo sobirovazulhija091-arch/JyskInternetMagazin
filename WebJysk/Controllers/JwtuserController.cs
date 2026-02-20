@@ -28,7 +28,7 @@ signInManager,IJwtService jwt,IEmailService emailService) : ControllerBase
 
         var token = await _jwt.CreateTokenAsync(user);
         await _emailService.SendAsync(dto.Email, "Registering to App", "You have successfully registered to our application!");
-        // await _userManager.AddToRoleAsync(user, "Admin");
+        await _userManager.AddToRoleAsync(user, "Admin");
         return Ok(new { token });
     }
 

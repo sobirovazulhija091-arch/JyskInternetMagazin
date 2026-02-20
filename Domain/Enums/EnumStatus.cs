@@ -1,4 +1,4 @@
-public enum EnumStatue
+public enum EnumStatus
 {
  
     Paid = 1,           // Payment successful

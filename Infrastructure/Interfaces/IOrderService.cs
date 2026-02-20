@@ -1,9 +1,9 @@
 public interface IOrderService
 {
-    Task<Response<string>> AddAsync(OrderDto dto);
-     Task<Response<List<Order>>> GetAsync();
-     Task<Response<Order>> GetByIdAsync(int orderid);
-     Task<Response<string>> UpdateStatusAsync(int orderid,string Status);
-     Task<Response<string>> DeleteAsync(int orderid);   
-    //  Task<Response<List<Order>>>  GetUserOrdersAsync(string userid);
+    Task<Response<string>> CreateOrderAsync(string userId);
+    Task<Response<List<Order>>> GetAllAsync();
+    Task<Response<List<Order>>> GetUserOrdersAsync(string userId);
+    Task<Response<Order>> GetByIdAsync(int id);
+    Task<Response<string>> UpdateStatusAsync(int id, EnumStatus status);
+    Task<Response<string>> CancelOrderAsync(int id);
 }

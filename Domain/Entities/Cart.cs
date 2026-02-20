@@ -6,4 +6,5 @@ public class Cart
     public User User { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public List<CartItem> CartItems{get;set;}=[];
 }
