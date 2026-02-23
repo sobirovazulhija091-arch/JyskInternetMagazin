@@ -1,14 +1,14 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
-[ApiController]
-[Route("api/caching")]
+    [ApiController]
+[Route("api/[controller]")]
 public class CategoryController(ICategoryService categoryService):ControllerBase
 {
     private readonly ICategoryService service = categoryService;
-    [ApiController]
-[Route("api/[controller]")]
+
 public class CategoryController(ICategoryService service) : ControllerBase
 {
     private readonly ICategoryService _service=service;

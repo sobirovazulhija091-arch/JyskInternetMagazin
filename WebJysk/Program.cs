@@ -70,16 +70,16 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
         .ForJob(jobKey)
         .WithSimpleSchedule(x =>
-            x.WithIntervalInMinutes(2)
+            x.WithIntervalInMinutes(20)
              .RepeatForever()));
 });
 
 builder.Services.AddQuartzHostedService();
 
 builder.Services.AddScoped<IUserService,UserService>();
-// builder.Services.AddScoped<IOrderService,OrderService>();
-// builder.Services.AddScoped<IProductService,ProductService>();
-// builder.Services.AddScoped<IWarhouseService, WarhouseServce>();
+builder.Services.AddScoped<IOrderService,OrderService>();
+builder.Services.AddScoped<IProductService,ProductService>();
+builder.Services.AddScoped<IWarhouseService, WarhouseServce>();
 builder.Services.AddScoped<ICategoryService, CategoryServce>();
 builder.Services.AddScoped<ICartService,CartService>(); 
 builder.Services.AddScoped<IBrandService,BrandService>();
@@ -87,7 +87,6 @@ builder.Services.AddScoped<IDeliveryService,DeliveryService>();
 builder.Services.AddScoped<IPaymentService,PaymentService>();
 builder.Services.AddScoped<IDescountService,DescountService>();
 builder.Services.AddScoped<IReviewService,ReviewService>();
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

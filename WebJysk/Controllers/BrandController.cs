@@ -1,13 +1,13 @@
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
 [ApiController]
 [Route("api/[controller]")]
-public class BrandController : ControllerBase
+public class BrandController(IBrandService service) : ControllerBase
 {
-    private readonly IBrandService _service;
-
-    public BrandController(IBrandService service)
-    {
-        _service = service;
-    }
+    private readonly IBrandService _service=service;
 
     [Authorize(Roles = "Admin,Manager")]
     [HttpPost]

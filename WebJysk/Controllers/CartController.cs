@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 public class CartController(ICartService cartService) : ControllerBase
 {
     private readonly ICartService service = cartService;
-    [httpPost]
+    [HttpPost]
     public async Task<Response<string>> AddItemAsync(string userId, int productId, int quantity)
     {
         return await service.AddItemAsync(userId, productId, quantity);
@@ -28,7 +28,7 @@ public class CartController(ICartService cartService) : ControllerBase
     {
         return await service.DeltetCartAsync(userId);
     }
-    [HttGet]
+    [HttpGet]
     public async Task<Response<Cart>> GetUserCartAsync(string userId)
     {
         return await service.GetUserCartAsync(userId);

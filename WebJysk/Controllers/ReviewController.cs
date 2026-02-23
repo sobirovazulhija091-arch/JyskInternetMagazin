@@ -1,3 +1,8 @@
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
 [ApiController]
 [Route("api/[controller]")]
 public class ReviewController(IReviewService service) : ControllerBase
@@ -8,12 +13,12 @@ public class ReviewController(IReviewService service) : ControllerBase
     {
        return await _service.AddReviewAsync(dto);
     }
-    [HttpGet("product/{productId}")]
+    [HttpGet("{productId}")]
     public async Task<Response<List<Review>>> GetProductReviewsAsync(int productId)
     {
         return await _service.GetProductReviewsAsync(productId);
     }
-    [HttpGet("average/{productId}")]
+    [HttpGet("{productId}")]
     public async Task<Response<double>> GetAverageAsync(int productId)
     {
         return await _service.GetAverageRatingAsync(productId);
