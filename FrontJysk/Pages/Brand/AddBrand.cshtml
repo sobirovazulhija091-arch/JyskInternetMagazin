@@ -1,0 +1,26 @@
+@page
+@model FrontJysk.Pages.Brand.AddBrandModel
+
+<h2>Add New Brand</h2>
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div>
+        <label asp-for="BrandDto.Name"></label>
+        <input asp-for="BrandDto.Name" class="form-control" />
+        <span asp-validation-for="BrandDto.Name" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="BrandDto.Logo"></label>
+        <input asp-for="BrandDto.Logo" class="form-control" placeholder="Enter logo URL" />
+        <span asp-validation-for="BrandDto.Logo" class="text-danger"></span>
+    </div>
+
+    <button type="submit">Add Brand</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

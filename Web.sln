@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{CAB01571-0B9E-46EA-B968-25C05A7004C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontJysk", "FrontJysk\FrontJysk.csproj", "{82E5FD20-EE2F-431F-BCEA-2B90BACE520C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{CAB01571-0B9E-46EA-B968-25C05A7004C5}.Release|x64.Build.0 = Release|Any CPU
 		{CAB01571-0B9E-46EA-B968-25C05A7004C5}.Release|x86.ActiveCfg = Release|Any CPU
 		{CAB01571-0B9E-46EA-B968-25C05A7004C5}.Release|x86.Build.0 = Release|Any CPU
+		{82E5FD20-EE2F-431F-BCEA-2B90BACE520C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82E5FD20-EE2F-431F-BCEA-2B90BACE520C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82E5FD20-EE2F-431F-BCEA-2B90BACE520C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{82E5FD20-EE2F-431F-BCEA-2B90BACE520C}.Debug|x64.Build.0 = Debug|Any CPU
+		{82E5FD20-EE2F-431F-BCEA-2B90BACE520C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{82E5FD20-EE2F-431F-BCEA-2B90BACE520C}.Debug|x86.Build.0 = Debug|Any CPU
+		{82E5FD20-EE2F-431F-BCEA-2B90BACE520C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82E5FD20-EE2F-431F-BCEA-2B90BACE520C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82E5FD20-EE2F-431F-BCEA-2B90BACE520C}.Release|x64.ActiveCfg = Release|Any CPU
+		{82E5FD20-EE2F-431F-BCEA-2B90BACE520C}.Release|x64.Build.0 = Release|Any CPU
+		{82E5FD20-EE2F-431F-BCEA-2B90BACE520C}.Release|x86.ActiveCfg = Release|Any CPU
+		{82E5FD20-EE2F-431F-BCEA-2B90BACE520C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
