@@ -3,12 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-    [ApiController]
+[ApiController]
 [Route("api/[controller]")]
-public class CategoryController(ICategoryService categoryService):ControllerBase
-{
-    private readonly ICategoryService service = categoryService;
-
 public class CategoryController(ICategoryService service) : ControllerBase
 {
     private readonly ICategoryService _service=service;
@@ -22,7 +18,7 @@ public class CategoryController(ICategoryService service) : ControllerBase
     }
     [Authorize(Roles = "Admin,Manager")]
     [HttpPut("{id}")]
-    public async Task<Response<string>> UpdateAsync(int id, UpdateCategoryDto dto)
+    public async Task<Response<string>> UpdateAsync(int id,[FromBody]  UpdateCategoryDto dto)
     {
          return await _service.UpdateAsync(id, dto);
         
@@ -38,5 +34,4 @@ public class CategoryController(ICategoryService service) : ControllerBase
     {
         return await _service.GetAllAsync();
     }
-}
 }

@@ -11,7 +11,6 @@ public class ReviewService(ApplicationDbContext dbContext):IReviewService
        var review =  new Review
        {
         ProductId=dto.ProductId,
-        UserId=dto.UserId,
        Rating=dto.Rating,
         Comment=dto.Comment
        };

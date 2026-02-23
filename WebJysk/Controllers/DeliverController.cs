@@ -6,9 +6,9 @@ using System.Security.Cryptography.X509Certificates;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DeliverController(IDeliverService deliver):ControllerBase
+public class DeliverController(IDeliveryService deliver):ControllerBase
 {
-    private readonly IDeliverService service = deliver;
+    private readonly IDeliveryService service = deliver;
     [HttpPost]
     public async Task<Response<string>> CreateDeliveryAsync(int orderId, EnumDeliveryType type)
     {

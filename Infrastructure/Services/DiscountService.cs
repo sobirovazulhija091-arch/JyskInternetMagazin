@@ -18,7 +18,7 @@ public class DiscountService(ApplicationDbContext dbContext):IDiscountService
     }
     public async Task<Response<decimal>> ApplyDiscountAsync(int orderId, string code)
     {
-       var order = context.Orders.FirstOrDefault(o=>o.Id==orderId);
+       var order = await context.Orders.FirstOrDefaultAsync(o=>o.Id==orderId);
        if (order == null)
         {
             return new Response<decimal>(HttpStatusCode.OK,"Not found");
@@ -30,7 +30,7 @@ public class DiscountService(ApplicationDbContext dbContext):IDiscountService
           return new Response<decimal>(HttpStatusCode.NotFound, "Invalid(Not found) discount code");   
         }
         var discountAmount = order.TotalAmount * discount.Percentage / 100;
-    var exectamountwithdescount = order.TotalAmount -= discountAmount;
+       var exectamountwithdescount = order.TotalAmount -= discountAmount;
     await context.SaveChangesAsync();
     return new Response<decimal>(HttpStatusCode.OK, "Discount applied", exectamountwithdescount);
 

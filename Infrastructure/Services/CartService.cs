@@ -10,32 +10,46 @@ public class CartService(ApplicationDbContext dbContext):ICartService//корз�
     public async Task<Response<string>> AddItemAsync(string userId, int productId, int quantity)
     {
         //sanjidani hast hamin product boz hast mi hamin product dar sklad  mo 
-        var product = context.Products.FirstOrDefault(p=>p.Id==productId);
-        if(product == null)
-        {
-            return new Response<string>(HttpStatusCode.NotFound,"Not found product");
-        }
-        if(product.StockQuantity<quantity){ return new Response<string>(HttpStatusCode.NotFound,"Not enough stock");}
-        // 
-        var cart =  await context.Carts.Include(c=>c.CartItems).FirstOrDefaultAsync(c=>c.UserId==userId);
-        //sohtani cart baroi user
-        if (cart==null)
-        {
-             cart = new Cart {UserId = userId};
-            await context.Carts.AddAsync(cart);
-        }
-        // adding product 
-        var existinginsideusercart = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
-       if (existinginsideusercart  != null)
-        existinginsideusercart .Quantity += quantity;
-    else
-        cart.CartItems.Add(new CartItem
-        {
-            ProductId = productId,
-            Quantity = quantity
-        });
+       var product = await context.Products.FirstOrDefaultAsync(p => p.Id == productId);
 
-    await context.SaveChangesAsync();
+if (product == null)
+   { 
+    return new Response<string>(HttpStatusCode.NotFound, "Product not found");
+   }
+var cart = await context.Carts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == userId);
+if (cart == null)
+{
+    cart = new Cart
+    {
+        UserId = userId,
+        CartItems = new List<CartItem>()
+    };
+    await context.Carts.AddAsync(cart);
+}
+
+var existing = cart.CartItems
+    .FirstOrDefault(ci => ci.ProductId == productId);
+
+int newQuantity = quantity;
+
+if (existing != null)
+{
+    newQuantity = existing.Quantity + quantity;
+}
+
+if (newQuantity > product.StockQuantity)
+    return new Response<string>(HttpStatusCode.BadRequest, "Not enough stock");
+
+if (existing != null)
+    existing.Quantity = newQuantity;
+else
+    cart.CartItems.Add(new CartItem
+    {
+        ProductId = productId,
+        Quantity = quantity
+    });
+
+await context.SaveChangesAsync();
 
     return new Response<string>(HttpStatusCode.OK,"Item added to cart");
     }
@@ -56,7 +70,6 @@ public class CartService(ApplicationDbContext dbContext):ICartService//корз�
        return new Response<Cart>(HttpStatusCode.OK,"Ok,",get);
     
     }
-
     public async Task<Response<string>> RemoveItemAsync(string userId, int productId)
     {
         var cart = await context.Carts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == userId);
@@ -77,18 +90,30 @@ public class CartService(ApplicationDbContext dbContext):ICartService//корз�
     public async Task<Response<string>> UpdateQuantityAsync(string userId, int productId, int quantity)
     {
 
-        var update = await context.Carts.Include(c=>c.CartItems).FirstAsync(c=>c.UserId==userId);
-        if (update == null)
+       var cart = await context.Carts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == userId);
+
+if (cart == null)
         {
-            return new Response<string>(HttpStatusCode.NotFound,"Not Found");
+          return new Response<string>(HttpStatusCode.NotFound, "Cart not found");   
         }
-         var itemupdate = update.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
-    if (itemupdate == null)
+
+var item = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+
+if (item == null)
         {
-          return new Response<string>(HttpStatusCode.NotFound, "Product not in cart");   
+    return new Response<string>(HttpStatusCode.NotFound, "Item not found");         
         }
-         itemupdate.Quantity=quantity;
-         await context.SaveChangesAsync();
+   
+var product = await context.Products
+    .FirstOrDefaultAsync(p => p.Id == productId);
+
+if (product == null || quantity > product.StockQuantity)
+        {
+           return new Response<string>(HttpStatusCode.BadRequest, "Not enough stock");   
+        }
+
+item.Quantity = quantity;
+await context.SaveChangesAsync();
           return new Response<string>(HttpStatusCode.OK,"Updated successfully");  
     }
 }

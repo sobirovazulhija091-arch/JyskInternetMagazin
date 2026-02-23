@@ -11,9 +11,14 @@ public class ProductService(ApplicationDbContext dbContext):IProductService
     {
         var product = new Product
         {
-          Name = dto.Name,
-          Description = dto.Description,
-          Price = dto.Price,
+         Name = dto.Name,
+         Description = dto.Description,
+         Price = dto.Price,
+         StockQuantity=dto.StockQuantity,
+         CategoryId = dto.CategoryId,
+         DiscountPrice = dto.DiscountPrice,
+         BrandId = dto.BrandId,
+         IsActive = dto.IsActive
         };
        await context.Products.AddAsync(product);
        await context.SaveChangesAsync();
@@ -105,11 +110,11 @@ public class ProductService(ApplicationDbContext dbContext):IProductService
         var brand = await context.Products.Include(b=>b.Brand).ToListAsync();
         return new Response<List<Product>>(HttpStatusCode.OK,"ok",brand);   
     }
-    public async Task<Response<List<Product>>> GetByCategoryAsync(int categoryid)
-    {
-        var cp = await context.Products.Include(a=>a.Category).ToListAsync();
-        return new Response<List<Product>>(HttpStatusCode.OK,"ok",cp);   
-    }
+   public async Task<Response<List<Product>>> GetByCategoryAsync(int categoryid)
+{
+    var products = await context.Products.Where(p => p.CategoryId == categoryid).ToListAsync();
+    return new Response<List<Product>>(HttpStatusCode.OK, "ok", products);
+}
 
     public async Task<Response<Product>> GetByIdAsync(int productid)
     {

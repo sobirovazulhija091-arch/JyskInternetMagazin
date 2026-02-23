@@ -1,19 +1,34 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Xml;
 public class CategoryServce(ApplicationDbContext dbContext):ICategoryService
 {
     private readonly ApplicationDbContext context = dbContext;
 
     public async Task<Response<string>> AddAsync(CategoryDto dto)
     {
-        var category = new Category
-        {
-           Name=dto.Name
-        }; 
-        await context.Categories.AddAsync(category);
-        await context.SaveChangesAsync();
-        return new Response<string>(HttpStatusCode.OK,"Add successfully!");
+       if (dto.ParentId != null)
+    {
+        var parentExists = await context.Categories
+            .AnyAsync(c => c.Id == dto.ParentId);
+
+        if (!parentExists)
+            return new Response<string>(
+                HttpStatusCode.BadRequest,
+                "Parent category not found");
+    }
+
+    var category = new Category
+    {
+        Name = dto.Name,
+        ParentId = dto.ParentId
+    };
+
+    await context.Categories.AddAsync(category);
+    await context.SaveChangesAsync();
+
+    return new Response<string>(HttpStatusCode.OK, "Category created");
     }
 
     public async Task<Response<string>> DeleteAsync(int categoryid)
@@ -36,10 +51,26 @@ public class CategoryServce(ApplicationDbContext dbContext):ICategoryService
 
     public async Task<Response<string>> UpdateAsync(int categoryid, UpdateCategoryDto dto)
     {
-        var c = await context.Categories.FindAsync(categoryid);
-        c.Name=dto.Name;
-        await context.SaveChangesAsync();
-        return new Response<string>(HttpStatusCode.OK,"ok");
+        var category = await context.Categories.FirstOrDefaultAsync(c => c.Id == categoryid);
+
+    if (category == null)
+    {
+        return new Response<string>(HttpStatusCode.NotFound,"Category not found");
+    }
+    category.Name = dto.Name;
+    if (dto.ParentId != null)
+    {
+        var parentExists = await context.Categories
+            .AnyAsync(c => c.Id == dto.ParentId);
+
+        if (!parentExists)
+        {
+     return new Response<string>(HttpStatusCode.BadRequest,"Parent category not found");
+        }
+    }
+    category.ParentId = dto.ParentId;
+ await context.SaveChangesAsync();
+    return new Response<string>(HttpStatusCode.OK, "Updated successfully");
     }
     public async     Task<Response<List<Category>>> GetSubCategoriesAsync(int parentId)
     {

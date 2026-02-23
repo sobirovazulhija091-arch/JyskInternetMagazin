@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
     [Route("api/[controller]")]
     [ApiController]
     public class EmailController(IEmailService service, UserManager<User> userManager) : ControllerBase

@@ -20,22 +20,20 @@ public class OrderService(ApplicationDbContext dbContext):IOrderService
     return new Response<string>(HttpStatusCode.OK, "Order deleted successfully");
     }
 
-    public async Task<Response<string>> CreateOrderAsync(string userId)
+    public async Task<Response<string>> CreateOrderAsync(OrderDto dto)
     {
-       var user = await context.Users.FirstOrDefaultAsync(u=>u.Id==userId);
-
-    if (user==null)
-        {
-              return new Response<string>(HttpStatusCode.NotFound, "User not found");
-        }
         var order = new Order
     {
-        UserId = userId,
-        OrderDate = DateTime.UtcNow,
-        Status = EnumStatus.Paid
+        PaymentMethod = dto.PaymentMethod,
+        Status =EnumStatus.Paid,
+        TotalAmount = dto.TotalAmount,
+        DeliveryAddress = dto.DeliveryAddress,
+        OrderDate = DateTime.UtcNow
     };
+
     await context.Orders.AddAsync(order);
     await context.SaveChangesAsync();
+
     return new Response<string>(HttpStatusCode.OK, "Order created successfully");
     }
 
@@ -87,7 +85,7 @@ public class OrderService(ApplicationDbContext dbContext):IOrderService
     public  async Task<Response<List<Order>>> GetUserOrdersAsync(string userId)
     {
         var orders = await context.Orders.Include(o=>o.User).Where(o => o.UserId == userId).ToListAsync();
-    return new Response<List<Order>>(HttpStatusCode.OK, "Success", orders);
+        return new Response<List<Order>>(HttpStatusCode.OK, "Success", orders);
     }
 
     public async Task<Response<string>> UpdateStatusAsync(int id, EnumStatus status)

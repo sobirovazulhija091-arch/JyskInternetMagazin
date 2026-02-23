@@ -6,9 +6,9 @@ using System.Security.Cryptography.X509Certificates;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DescountController(IDescountService descount):ControllerBase
+public class DescountController(IDiscountService descount):ControllerBase
 {
-    public readonly IDescountService service=descount;
+    public readonly IDiscountService service=descount;
 
 [Authorize(Roles = "Admin,Manager")]
    [HttpPost("create")]

@@ -13,12 +13,12 @@ public class ReviewController(IReviewService service) : ControllerBase
     {
        return await _service.AddReviewAsync(dto);
     }
-    [HttpGet("{productId}")]
+  [HttpGet("product/{productId}")]
     public async Task<Response<List<Review>>> GetProductReviewsAsync(int productId)
     {
         return await _service.GetProductReviewsAsync(productId);
     }
-    [HttpGet("{productId}")]
+ [HttpGet("product/{productId}/average")]
     public async Task<Response<double>> GetAverageAsync(int productId)
     {
         return await _service.GetAverageRatingAsync(productId);

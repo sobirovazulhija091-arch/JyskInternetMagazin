@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using Domain.DTOs;
+using Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -8,17 +10,12 @@ using Microsoft.AspNetCore.Authorization;
 public class OrderController(IOrderService service) : ControllerBase
 {
     private readonly IOrderService _service=service;
-
-
     [Authorize]
     [HttpPost("create")]
-    public async Task<Response<string>> CreateOrderAsync()
+    public async Task<Response<string>> CreateOrderAsync(OrderDto dto)
     {
-        var userId = User.FindFirst("sub")?.Value;
-        return await _service.CreateOrderAsync(userId);
+        return await _service.CreateOrderAsync(dto);
     }
-
-    
     [Authorize(Roles = "Admin,Manager")]
     [HttpGet]
     public async Task<PagedResult<Order>> GetAllAsync(

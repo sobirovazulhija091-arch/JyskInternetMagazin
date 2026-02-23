@@ -25,11 +25,11 @@ public class ApplicationDbContext : IdentityDbContext<User>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Category>()
-            .HasOne<Category>()
-            .WithMany(c => c.Children)
-            .HasForeignKey(c => c.ParentId)
-            .OnDelete(DeleteBehavior.Restrict);
+       modelBuilder.Entity<Category>()
+     .HasOne(c => c.Parent)
+    .WithMany(c => c.Children)
+    .HasForeignKey(c => c.ParentId)
+    .OnDelete(DeleteBehavior.Restrict);
 //OnDelete(DeleteBehavior.Restrict)=>If product is used in any order You CANNOT delete that product from database
 
         modelBuilder.Entity<Category>()
