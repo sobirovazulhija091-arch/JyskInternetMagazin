@@ -9,12 +9,16 @@ using System.Security.Cryptography.X509Certificates;
 public class DescountController(IDescountService descount):ControllerBase
 {
     public readonly IDescountService service=descount;
-    [HttpPost]
+
+[Authorize(Roles = "Admin,Manager")]
+   [HttpPost("create")]
    public async Task<Response<string>> CreateAsync(DiscountDto dto)
     {
         return await service.CreateAsync(dto);
     }
-    [HttpPost]
+    [Authorize]
+    [HttpPost("validate")]
+
     public async Task<Response<bool>> ValidateAsync(string code)
     {
         return await service.ValidateAsync(code);
