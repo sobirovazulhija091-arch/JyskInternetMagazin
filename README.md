@@ -3,14 +3,14 @@
 ---- Small ASP.NET Core Web API project for internet shop practice.
 
 It has 3 projects:
-- `Domain` (entities, dto, response models)
-- `Infrastructure` (services, interfaces, db context)
-- `WebJysk` (API controllers, Program.cs)
+- `Domain` (entities, dtos, response models,filter,enum,seed)
+- `Infrastructure` (services, interfaces, db context,response,migration)
+- `WebJysk` (API controllers, Program.cs,Middlware,)
+- `gitignore` 
 
 ## What is inside
-
 - JWT auth (register/login)
-- User, Product, Order, Category, Cart controllers
+- User, Product, Order, Category, Cart ,Brand ,Delivery ,Discount,Payment,Review,WarehouseProduct controllers
 - Email service (test email, forgot/reset password)
 - Swagger UI
 
@@ -32,8 +32,4 @@ It has 3 projects:
 - Roles are seeded on app startup.
 
 ## Not Done Yet 
-* Domian : -Filter+
-* Infrastructure : Service + - adding filter,search and all methouds +
-* WeJysk : Controller - Role adding and return methods half plus
-
-
+* Checking

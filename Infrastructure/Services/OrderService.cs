@@ -1,53 +1,104 @@
-// using System.Net;
-// using System.Data;
-// using Microsoft.EntityFrameworkCore;
+using System.Net;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
+using Infrastructure.Responses;
+using Domain.DTOs;
 
-// public class OrderService(ApplicationDbContext dbContext):IOrderService
-// {
-//      private readonly ApplicationDbContext context = dbContext;
+public class OrderService(ApplicationDbContext dbContext):IOrderService
+{
+     private readonly ApplicationDbContext context = dbContext;
 
-//     public async Task<Response<string>> AddAsync(OrderDto dto)
-//     {
-//        var order = new Order
-//        {
-//          UserId = dto.UserId,
-//          status = dto.status,
-//          TotalAmount = dto.TotalAmount  
-//        };
-//        await context.Orders.AddAsync(order);
-//        await context.SaveChangesAsync();
-//        return new Response<string>(HttpStatusCode.OK,"Add successfully!");
-//     }
+    public async Task<Response<string>> DeleteOrderAsync(int id)
+    {
+        var order = await context.Orders.FirstOrDefaultAsync(o => o.Id == id);
+    if (order == null)
+        {
+          return new Response<string>(HttpStatusCode.NotFound, "Order not found");   
+        }
+    context.Orders.Remove(order);
+    await context.SaveChangesAsync();
+    return new Response<string>(HttpStatusCode.OK, "Order deleted successfully");
+    }
 
-//     public async Task<Response<string>> DeleteAsync(int orderid)
-//     {
-//        var del = await context.Orders.FindAsync(orderid);
-//        context.Orders.Remove(del);
-//        await context.SaveChangesAsync();
-//        return new Response<string>(HttpStatusCode.OK,"Deleted successfully!");
-//     }
+    public async Task<Response<string>> CreateOrderAsync(string userId)
+    {
+       var user = await context.Users.FirstOrDefaultAsync(u=>u.Id==userId);
 
-//     public async Task<Response<List<Order>>> GetAsync()
-//     {
-//         return new Response<List<Order>>(HttpStatusCode.OK,"ok", await context.Orders.ToListAsync());
-//     }
+    if (user==null)
+        {
+              return new Response<string>(HttpStatusCode.NotFound, "User not found");
+        }
+        var order = new Order
+    {
+        UserId = userId,
+        OrderDate = DateTime.UtcNow,
+        Status = EnumStatus.Paid
+    };
+    await context.Orders.AddAsync(order);
+    await context.SaveChangesAsync();
+    return new Response<string>(HttpStatusCode.OK, "Order created successfully");
+    }
 
-//     public async Task<Response<Order>> GetByIdAsync(int orderid)
-//     {
-//        var  order = await context.Orders.FindAsync(orderid);
-//        return new Response<Order>(HttpStatusCode.OK,"Ok",order);
-//     }
+    public async Task<PagedResult<Order>> GetAllAsync(FilterOrder filter, PagedQuery query)
+    {
+         var orders = context.Orders.AsQueryable();
 
-//    //  public async Task<Response<List<Order>>> GetUserOrdersAsync(string Userid)
-//    //  {
-//    //      var o = await context.Orders.Include(a=>a.Userid);
-//    //  }
+        if (filter.Status!=null)
+        {
+            orders = orders.Where(o => o.Status == filter.Status);
+         }
+        if (filter.FromDate.HasValue)
+        {
+            orders = orders.Where(o => o.OrderDate >= filter.FromDate.Value);
+        }
 
-//     public async Task<Response<string>> UpdateStatusAsync(int orderid, string Status)
-//     {
-//        var order = await context.Orders.FirstOrDefaultAsync(a=>a.Id==orderid);
-//        order.status=Status;
-//        await context.SaveChangesAsync();
-//        return new Response<string>(HttpStatusCode.OK,"Updated successfully");
-//     }
-// }
+        if (filter.ToDate.HasValue)
+        {
+            orders = orders.Where(o => o.OrderDate <= filter.ToDate.Value);
+        } 
+          var total = await orders.CountAsync();
+      if(query.Page>0 & query.PageSize >0)
+      {
+         orders = orders.Skip((query.Page-1)*query.PageSize).Take(query.PageSize);
+      }
+    var users = await orders.ToListAsync();
+
+    return new PagedResult<Order>
+    {
+        Items = users,
+        Page = query.Page,
+        PageSize = query.PageSize,
+        TotalCount = total,
+        TotalPages = (int)Math.Ceiling((double)total / query.PageSize)
+    };
+    }
+
+    public async Task<Response<Order>> GetByIdAsync(int id)
+    {
+        var order = await context.Orders.Include(o => o.OrderItems).FirstOrDefaultAsync(o => o.Id == id);
+
+    if (order == null)
+        {
+          return new Response<Order>(HttpStatusCode.NotFound, "Order not found");   
+        }
+    return new Response<Order>(HttpStatusCode.OK, "Success", order);
+    }
+
+    public  async Task<Response<List<Order>>> GetUserOrdersAsync(string userId)
+    {
+        var orders = await context.Orders.Include(o=>o.User).Where(o => o.UserId == userId).ToListAsync();
+    return new Response<List<Order>>(HttpStatusCode.OK, "Success", orders);
+    }
+
+    public async Task<Response<string>> UpdateStatusAsync(int id, EnumStatus status)
+    {
+       var order = await context.Orders.FirstOrDefaultAsync(o => o.Id == id);
+    if (order == null)
+        {
+         return new Response<string>(HttpStatusCode.NotFound, "Order not found");   
+        }
+    order.Status = status;
+    await context.SaveChangesAsync();
+    return new Response<string>(HttpStatusCode.OK, "Order status updated");
+    }
+}

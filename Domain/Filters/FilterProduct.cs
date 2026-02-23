@@ -5,6 +5,5 @@ public class FilterProduct
     public int? BrandId { get; set; }          // WHERE BrandId
     public decimal? MinPrice { get; set; }     // Price >= MinPrice
     public decimal? MaxPrice { get; set; }     // Price <= MaxPrice
-    public bool? InStock { get; set; }        // Check warehouse quantity
     public bool? IsActive { get; set; }      //// Check do we have this product or not 
 }
