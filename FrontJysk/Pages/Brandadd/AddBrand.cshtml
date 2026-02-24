@@ -1,0 +1,64 @@
+@page
+@model FrontJysk.Pages.Brandadd.AddBrandModel
+
+@{
+    ViewData["Title"] = "Add Brand";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+
+            <div class="card shadow-sm p-4">
+
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold">Create New Brand</h2>
+                    <p class="text-muted">
+                        Add a new brand to your store catalog
+                    </p>
+                </div>
+
+                <form method="post">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <!-- Brand Name -->
+                    <div class="mb-4">
+                        <label asp-for="BrandDto.Name" class="form-label fw-semibold"></label>
+                        <input asp-for="BrandDto.Name"
+                               class="form-control form-control-lg"
+                               placeholder="Example: Nike" />
+                        <span asp-validation-for="BrandDto.Name" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Logo -->
+                    <div class="mb-4">
+                        <label asp-for="BrandDto.Logo" class="form-label fw-semibold"></label>
+                        <input asp-for="BrandDto.Logo"
+                               class="form-control"
+                               placeholder="https://example.com/logo.png" />
+                        <span asp-validation-for="BrandDto.Logo" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="d-flex gap-3 mt-4">
+                        <button type="submit" class="btn btn-primary px-4">
+                            Add Brand
+                        </button>
+
+                        <a asp-page="/Brand/Index" class="btn btn-outline-secondary px-4">
+                            Cancel
+                        </a>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

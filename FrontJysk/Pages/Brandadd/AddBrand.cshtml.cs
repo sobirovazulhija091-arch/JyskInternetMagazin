@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace FrontJysk.Pages.Brand
+namespace FrontJysk.Pages.Brandadd
 {
     public class AddBrandModel : PageModel
     {
@@ -14,19 +14,15 @@ namespace FrontJysk.Pages.Brand
 
         [BindProperty]
         public BrandDto BrandDto { get; set; } = new();
-
         public void OnGet()
         {
         }
-
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
                 return Page();
-
             await _brandService.AddAsync(BrandDto);
-
-           return RedirectToPage("/Brand/AddBrand");
+           return RedirectToPage("/Brandadd/AddBrand");
         }
     }
 }

@@ -1,0 +1,16 @@
+@page
+@model GetBrandModel
+
+<h1>All Brands</h1>
+
+@foreach (var brand in Model.brandall)
+{
+    <div class="brand-div">
+        <h3>@brand.Name</h3>
+        <p>@brand.Logo</p>
+    </div>
+}
+
+<div><a asp-page="/Brandadd/AddBrand" class="btn btn-primary">
+    Add Brand
+</a></div>

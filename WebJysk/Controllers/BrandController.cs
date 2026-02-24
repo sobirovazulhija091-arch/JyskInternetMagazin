@@ -43,4 +43,9 @@ public class BrandController(IBrandService service) : ControllerBase
         return await _service.GetByIdAsync(id);
 
     }
+     [HttpGet("all-users")]
+    public List<Brand> GetAllBrand()
+    {
+        return _userManager.Brands.ToList();
+    }
 }
